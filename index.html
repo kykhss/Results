@@ -164,7 +164,7 @@ margin:auto;
                 padding: 1px;
                 width: 100px;
                 height: 100px;
-                object-fit: cover;
+                object-fit: fill;
             }
         container{
         width:100%;
@@ -175,12 +175,13 @@ margin:auto;
         .arabic {
             font-size: 20px;
             margin-bottom: 0px;
-            font-family: 'Reem Kufi', sans-serif;
+            font-family: sans-serif;
             font-weight: 100;
+
         }
         .malayalam {
         font-size:14px;
-                font-family: "Karthika", "Noto Sans Malayalam", sans-serif;
+                font-family: sans-serif;
             }
             #campus{
             font-size:10px;
@@ -259,15 +260,15 @@ margin:auto;
 <body>
     <div id="nonePrint" style="display: block;">
     
-   
     
         
     <div id="searchField" class="container" style="display:block;">
         <div>
-            <img id="loginemblom3" src="https://drive.google.com/thumbnail?id=1BKHBRTLhL6xokJ-Bz8fkM3hjllsKIqvb&sz=800" width="150" height="150" z-index="-900">
+            <br>
+            <img id="loginemblom3" src="https://drive.google.com/thumbnail?id=1BKHBRTLhL6xokJ-Bz8fkM3hjllsKIqvb&sz=800" width="100" height="100">
             <h3 class="arabic"
 >KYHSS ATHAVANAD</h3>
-            <h3  style="margin-top:0px;margin-bottom:0.3em;" class="malayalam">SchoolCode:19094 : HSS Code :11118</h3>
+            <h3  style="margin-top:0px;margin-bottom:0.3em;" class="malayalam">School Code:19094 : HSS Code :11118</h3>
             <h3 id="campus" style="margin-top: 0.2em;">PMSA ORPHANAGE CAMPUS KATTILANGADI</h3>
           </div>
         <h2 style="color:red">Annual Examination Result</h2>
@@ -317,7 +318,6 @@ function capitalizeDivision() {
 
     </script>
     </div>
-       <div >
         <div id="printBtn" class="hidePrint" style="display:none; position:relative; margin-top:10px; margin-right:10px; justify-content: flex-end;">
             <button style="width:fit-content; text-align:center; margin-right: 5px;" onclick="printProgressCard()">Print</button>
             <button onclick="gotoSearch()" style="width:fit-content; background-color:blue; color:white;">Check Another Result</button>
@@ -336,9 +336,13 @@ function capitalizeDivision() {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     overflow: hidden;
     transition: all 0.3s ease;
-    border: 1px solid rgba(0, 123, 255, 0.3);">
+    border: 1px solid rgba(0, 123, 255, 0.3);
+    overflow-y: auto;
+    ">
     
     <div id="notificationHeader" style="
+    position: sticky;
+    top:0px;
         background: linear-gradient(135deg, #007bff, #00b4ff);
         color: white;
         padding: 15px 20px;
@@ -367,19 +371,47 @@ function capitalizeDivision() {
         </p>
         
         <div style="
+            
             background: #f9fbfa;
             border-radius: 8px;
             padding: 15px;
             margin-bottom: 20px;
             border-left: 4px solid #007bff;">
             <h4 style="margin: 0 0 10px 0; color: #495057;">
-                <strong>Description of Progression</strong>
+                <strong>promotion Criteria</strong>
             </h4>
-            <p style="margin: 0; color: #6c757d; line-height: 1.5;">
+            <p id="criteria" style="margin: 0; color: #6c757d; line-height: 1;">
                 <!-- Your notification content here -->
-            </p>
-        </div>
+                 <br>
+                <li style="color: #317c41;" >"Students who achieved a TE mark of 30% or above were considered proficient and passed the exam."
         
+                </li>
+                <br>
+                <hr>
+                <li style="color: #e65954;">
+                    "Any student with an insufficient TE mark, falling below 30%, was marked as failed."
+                </li>
+                <hr>
+                <br>
+                <div style="align-content: center; width: 100%; text-align: center;justify-items: center;">
+                    <br>
+                    <strong>Grading criteria</strong>
+                    <br>
+                    <hr>
+                    <table border="1" style="width: 100%; border-collapse: collapse; border: 1px solid #000000; font-size: 14px;">
+                        <thead style="border: 1px solid #000000;">
+                            <td>Percentage </td>
+                            <td> grade </td>
+            
+                        </thead>
+                        <tbody id="gradeCriteria"></tbody>
+                    </table>
+                </div>
+                
+            </p>
+            
+        </div>
+       
         <button id="getResultBtn"onclick=" closeNotification() " style="
             display: none;
             width: 100%;
@@ -397,12 +429,12 @@ function capitalizeDivision() {
         
     </div>
     
+        </div>
+
    
-</div>
-    </div>
-</div>
-    </div>
+    
     <div id="progressCardContainer" style="display: block;"></div>
+    </div>
    <div id="printArea" style="display: none;">
     <div style="display: flex;justify-content: right;">
         
@@ -415,6 +447,60 @@ function capitalizeDivision() {
    </div>
    
    <script>
+    function displayGradingCriteria(className) {
+        document.getElementById('notification').style.display = 'block';
+
+// To show the close button (if needed)
+document.getElementById('closeNotification').style.display = 'block';
+  const gradeCriteriaTable = document.getElementById("gradeCriteria");
+  gradeCriteriaTable.innerHTML = ""; // Clear previous content
+
+  let gradingSystem = [];
+
+  if (className > "7") {
+    // Grading system for classes above 7 (A+, A, B, etc.)
+    gradingSystem = [
+      { percentage: "90-100", grade: "A+" },
+      { percentage: "80-89", grade: "A" },
+      { percentage: "70-79", grade: "B+" },
+      { percentage: "60-69", grade: "B" },
+      { percentage: "50-59", grade: "C+" },
+      { percentage: "40-49", grade: "C" },
+      { percentage: "30-39", grade: "D+" },
+      { percentage: "Below 40", grade: "D" }, // Or "Fail"
+    ];
+  } else {
+    // Grading system for classes 7 and below (A, B, C, D, E)
+    gradingSystem = [
+      { percentage: "85-100", grade: "A" },
+      { percentage: "70-84", grade: "B" },
+      { percentage: "55-69", grade: "C" },
+      { percentage: "40-54", grade: "D" },
+      { percentage: "30-39", grade: "E" },
+      { percentage: "Below 30", grade: "F" }, // Or "Fail"
+    ];
+  }
+
+  // Populate the table
+  gradingSystem.forEach((criteria) => {
+    const row = document.createElement("tr");
+    const percentageCell = document.createElement("td");
+    const gradeCell = document.createElement("td");
+
+    percentageCell.textContent = criteria.percentage;
+    gradeCell.textContent = criteria.grade;
+
+    row.appendChild(percentageCell);
+    row.appendChild(gradeCell);
+    gradeCriteriaTable.appendChild(row);
+  });
+}
+
+// Example usage:
+// Call this function when you want to display the grading criteria, passing the class name.
+// For example:
+// displayGradingCriteria("8"); // For classes above 7
+// displayGradingCriteria("6"); // For classes 7 and below
     function gotoSearch(){
     document.getElementById("searchField").style.display="block";
     
@@ -435,8 +521,8 @@ function capitalizeDivision() {
         }
 // Example usage in your displayProgressCard function:
 //progressHTML += `<button onclick="saveProgressCardAsPDF()">Save as PDF</button>`; // Call the function
-        function downloadPDF() {
-            const element = document.getElementById("printContents"); // Target the progress card container
+        async function downloadPDF() {
+            const element = await document.getElementById("printContents"); // Target the progress card container
             html2pdf().from(element).save("Progress_Card.pdf");
         }
 
@@ -521,19 +607,23 @@ function getGrade(maxMark, obtMark) {
                 alert("❌ Please enter all details.");
                 return;
             }
+            var classt = studentClass+" "+division; 
             if (parseInt(adnumber) === 4789 && division === "ADMIN") {
 alert("Admin access granted");
                     window.location.href = "csvparse.html";
 
                 }else{
+                    displayGradingCriteria(studentClass)
+                // To show the notification
                     loading('block');
-                  const result = await loadReport2();
+                    const result = await loadReport2();
                   if(result.adnumber===adnumber){
             if((parseFloat (result.balance)||0) >=1000){
-                resultHold();
+                resultHold(result);
                 loading('none');
-            }
-        }
+                
+            }else{
+        
             try {
                 const querySnapshot = await getDocs(query(
                     collection(db, "schoolMarks"),
@@ -548,12 +638,6 @@ alert("Admin access granted");
                     return;
                 }
                 
-                // To show the notification
-document.getElementById('notification').style.display = 'block';
-
-// To show the close button (if needed)
-document.getElementById('closeNotification').style.display = 'block';
-
 
                 let studentData = [];
                 let studentInfo = {};
@@ -561,19 +645,7 @@ document.getElementById('closeNotification').style.display = 'block';
                 querySnapshot.forEach((doc) => {
     const data = doc.data();
 
-    // Ensure subjects array exists
-    if (Array.isArray(data.subjects)) {
-        data.subjects.forEach(sub => {
-            studentData.push({
-                subject: sub.subject,  // Access subject inside the sub-object
-                maxTeMark: sub.maxMark.split('_')[0],  // Access maxMark inside the sub-object
-                obtTeMark: sub.obtMark.split('_')[0],   // Access obtMark inside the sub-object
-                maxCeMark: sub.maxMark.split('_')[1],  // Access maxMark inside the sub-object
-                obtCeMark: sub.obtMark.split('_')[1], 
-            
-            });
-        });
-    }
+    studentData=  processSubjects(data);
 
                     studentInfo = {
                         name: data.name,
@@ -590,14 +662,75 @@ document.getElementById('closeNotification').style.display = 'block';
                 alert("❌ Error fetching data: " + error.message);
             }
         }
+    }}
         });
+
+        function processSubjects(data) {
+    const subjectOrder = ["ARABIC", "MALAYALAM", "ENGLISH", "HINDI", "EVS", "BS", "BIOLOGY", "CHEMISTRY", "PHYSICS", "SS1", "MTS"];
+    const studentData = [];
+
+    if (Array.isArray(data.subjects)) {
+        const subjectsMap = new Map(); // Use a Map to maintain the order of subjects from data.subjects
+        data.subjects.forEach(sub => {
+            subjectsMap.set(sub.subject, sub);
+        });
+
+        subjectOrder.forEach(subjectName => {
+            if (subjectsMap.has(subjectName)) {
+                const sub = subjectsMap.get(subjectName);
+                studentData.push({
+                    subject: sub.subject,
+                    maxTeMark: sub.maxMark.split('_')[0],
+                    obtTeMark: sub.obtMark.split('_')[0],
+                    maxCeMark: sub.maxMark.split('_')[1],
+                    obtCeMark: sub.obtMark.split('_')[1],
+                });
+            }
+        });
+    }
+
+    return studentData;
+}
+        function resultHold (studentInfo){
+            let progressHTML = `
+       <div id="progressCard">
+        <img id="loginemblom3" src="https://drive.google.com/thumbnail?id=1BKHBRTLhL6xokJ-Bz8fkM3hjllsKIqvb&sz=800" width="150" height="150" z-index="-900">
+        <h1 class="arabic" style="margin-bottom:0px;">KYKHSS ATHAVANAD</h1>
+        <h2 style="margin-top:0px;margin-bottom:0.3em;" class="malayalam">School Code: 19094; HSS Code:11118</h2>
+        <h3 style="margin-top: 0.2em;">PMSA ORPHANAGE CAMPUS KATTILANGADI</h3>
+        <div class="progress-card">
+            <p style="display: flex; gap: 10px; font-size:16px;"><strong>Name of Student : </strong><span style="color:red; font-weight:bold;">${studentInfo.name}</span></p >
+            <p style="font-size:16px;"><strong>Admission Number:</strong> <span style="color:black; font-weight:bold;">${studentInfo.adnumber}</span></p>
+            <p style="font-size:16px;"><strong>Class:</strong> ${studentInfo.class||""}</p>
+            <table border="1" cellspacing="0" cellpadding="5" style="width: 100%; text-align: center;">
+            <tr>
+            <th>Subject</th>
+            <th>Te Marks</th>
+            <th>Ce Marks</th>
+            <th>Grade</th>
+            <th>Status</th>
+            </tr>
+            <tr>
+            <td colspan="5" style="color: red; background-color: rgb(175, 233, 27); font-size: 18px;">
+            Your Result is withheld due to Incomplete Fees Dues, Contact office for further details.
+            </td>
+            </tr>
+            </table>
+        </div>
+   </div>   
+   
+    `;
+    document.getElementById("printBtn").style.display = "flex";
+    document.getElementById("searchField").style.display = "none";
+    document.getElementById("progressCardContainer").innerHTML = progressHTML;
+        }
     
         function displayProgressCard(studentInfo, studentData) {
     let progressHTML = `
        <div id="progressCard">
         <img id="loginemblom3" src="https://drive.google.com/thumbnail?id=1BKHBRTLhL6xokJ-Bz8fkM3hjllsKIqvb&sz=800" width="150" height="150" z-index="-900">
             <h1 class="arabic" style="margin-bottom:0px;">KYKHSS ATHAVANAD</h1>
-            <h2 style="margin-top:0px;margin-bottom:0.3em;" class="malayalam">SchoolCode: 19094; HSS Code:11118</h2>
+            <h2 style="margin-top:0px;margin-bottom:0.3em;" class="malayalam">School Code: 19094; HSS Code:11118</h2>
             <h3 style="margin-top: 0.2em;">PMSA ORPHANAGE CAMPUS KATTILANGADI</h3>
             <div class="progress-card">
                 <p style="display: flex; gap: 10px; font-size:16px;"><strong>Name of Student : </strong><span style="color:red; font-weight:bold;">${studentInfo.name}</span></p >
@@ -619,7 +752,9 @@ document.getElementById('closeNotification').style.display = 'block';
 
 
     studentData.forEach((subject) => {
-        const grade = getGrade(subject.maxMark, subject.obtMark);
+        const totalObt = (parseFloat(subject.obtTeMark)||0)+(parseFloat(subject.obtCeMark)||0)
+        const totalMax = (parseFloat(subject.maxTeMark)||0)+(parseFloat(subject.maxCeMark)||0)
+        const grade = getGrade(totalMax,totalObt);
         const isPassed = ((parseFloat(subject.obtTeMark)||0)/(parseFloat(subject.maxTeMark)||0))*100 >= 30;
         const statusIcon = isPassed ? 'P':'F';//'✔️' : '❌'; // Tick for pass, Cross for fail
         const rowStyle = isPassed ? "" : 'style="background-color: #ffcccc; font-weight: bold;"'; // Red background for fail
@@ -646,23 +781,23 @@ document.getElementById('closeNotification').style.display = 'block';
 
     progressHTML += `
                 </table>
-                <p><strong>Total Marks:</strong> ${obtainedMarks} / ${totalMarks}</p>
+                 <div style="text-align: left;">
+        <p><strong>Total Marks:</strong> ${obtainedMarks} / ${totalMarks}</p>
 
-               <div style="display: flex; justify-content: space-between; margin:1px;">
-                     <p><strong>Percentage:</strong> ${percentage}%</p>
-            <span style="font-size:16px; width:fit-content;min-width:100px; padding: 10px; border: 1px solid #ccc; border-radius: 10px; background-color: ${!isPassed?'#efafaf':'#abd8b5'}; align-items: center;justify-content: center; color: ${!isPassed?'red':'green'}; " id="status" >${!isPassed?'ReAppear':'Passed'}</span>
-        
-    
-           </div>
-        
-        </div>
+       <div style="display: flex; justify-content: space-between; margin:1px;">
+             <p><strong>Percentage:</strong> ${percentage}%</p>
+    <span> Result :
+    <span style="font-size:16px; width:fit-content;min-width:200px; padding: 8px; border: 1px solid #ccc; border-radius: 1px; background-color: ${hasFailed?'#efafaf':'#abd8b5'}; align-items: center;justify-content: center; color: ${hasFailed?'red':'green'}; " id="status" >${hasFailed?'ReAppear':'Passed'}</span>
+    </span>
+   </div>
+</div>
         
     `;
 
     if (hasFailed) {
         //progressHTML += `<div class="faild" style="color: red; font-weight: bold;">❌ You have failed the exam. Try again! ❌</div>`;
     } else {
-        progressHTML += `<div class="congratulations hideprint" style="color: green; font-weight: bold;">🎉 Congratulations! You have passed successfully! 🎉</div>`;
+        progressHTML += `<div class="congratulations hideprint" style="color: white; font-weight: bold;">🎉 Congratulations! You have passed successfully! 🎉</div>`;
     }
 
     progressHTML += `</div></div></div>`;
@@ -673,7 +808,7 @@ document.getElementById('closeNotification').style.display = 'block';
 }
 
 async function loadReport2() {
-    const adnumber = document.getElementById("searchAdnumber").value.trim()||'4178';
+    const adnumber = document.getElementById("searchAdnumber").value.trim();
     if(!adnumber){
         alert("Please enter your Ad number");
     }
@@ -708,6 +843,7 @@ console.log('usermail:'+adnumber)
         // You might want to add some user-facing error handling here
     }
 }
+
 //loadReport2();
     </script>
     
