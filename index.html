@@ -262,7 +262,7 @@ margin:auto;
     
     
         
-    <div id="searchField" class="container" style="display:none;">
+    <div id="searchField" class="container" style="display:block;">
         <div>
             <br>
              <h3 class="arabic"
@@ -448,7 +448,7 @@ function capitalizeDivision() {
    </div>
    
    <script>
-    function displayGradingCriteria2(className) {
+    function displayGradingCriteria(className) {
         document.getElementById('notification').style.display = 'block';
 
 // To show the close button (if needed)
@@ -476,8 +476,8 @@ document.getElementById('closeNotification').style.display = 'block';
       { percentage: "85-100", grade: "A" },
       { percentage: "70-84", grade: "B" },
       { percentage: "55-69", grade: "C" },
-      { percentage: "40-54", grade: "D" },
-      { percentage: "30-39", grade: "E" },
+      { percentage: "30-54", grade: "D" },
+      
       { percentage: "Below 30", grade: "F" }, // Or "Fail"
     ];
   }
@@ -678,7 +678,7 @@ if(clason > 7){
         );
 
         function processSubjects(data) {
-            //console.log(data);
+            console.log(data);
     const subjectOrder = ["ARABIC", "MALAYALAM", "ENGLISH", "HINDI", "EVS", "BS","G K", "BIOLOGY", "CHEMISTRY", "PHYSICS", "SS1", "MATHS","I T","PT"];
     const studentData = [];
 
@@ -769,7 +769,7 @@ if(clason > 7){
     let obtainedMarks = 0;
     let hasFailed = false; // Flag to check if the student failed
     let clason = (studentInfo.class).split(' ')[0];
-
+    let abcount = null;
     studentData.forEach((subject) => {
         const totalObt = (parseFloat(subject.obtTeMark)||0)+(parseFloat(subject.obtCeMark)||0)
         const totalMax = (parseFloat(subject.maxTeMark)||0)+(parseFloat(subject.maxCeMark)||0)
@@ -777,7 +777,9 @@ if(clason > 7){
         const isPassed = ((parseFloat(subject.obtTeMark)||0)/(parseFloat(subject.maxTeMark)||0))*100 >= 30;
         const statusIcon = isPassed ? 'P':'F';//'✔️' : '❌'; // Tick for pass, Cross for fail
         const rowStyle = isPassed ? "" : 'style="background-color: #ffcccc; font-weight: bold;"'; // Red background for fail
-
+        if (subject.obtTeMark === "Ab") {
+  abcount++; // Increment abcount
+}
         if (!isPassed) {
             hasFailed = true; // Mark as failed if any subject is below 18
         }
@@ -806,7 +808,7 @@ if(clason > 7){
        <div style="display: flex; justify-content: space-between; margin:1px;">
              <p><strong>Percentage:</strong> ${percentage}%</p>
     <span> Result :
-    <span style="font-size:16px; width:fit-content;min-width:200px; padding: 8px; border: 1px solid #ccc; border-radius: 1px; background-color: ${hasFailed?'#efafaf':'#abd8b5'}; align-items: center;justify-content: center; color: ${hasFailed?'red':'green'}; " id="status" >${hasFailed?'ReAppear':'Passed'}</span>
+    <span style="font-size:16px; width:fit-content;min-width:200px; padding: 8px; border: 1px solid #ccc; border-radius: 1px; background-color: ${hasFailed?'#efafaf':'#abd8b5'}; align-items: center;justify-content: center; color: ${hasFailed?'red':'green'}; " id="status" >${hasFailed? (((studentInfo.class.split(" ")[0]) > 6) ? 'Faild -_- ReAppear':'Faild-_- Promoted'):'Passed'}</span>
     </span>
    </div>
 </div>
@@ -820,10 +822,15 @@ if(clason > 7){
     }
 
     progressHTML += `</div></div></div>`;
-
+    if(abcount>5){
+        document.getElementById("progressCardContainer").innerHTML = "<p style='color:red; font-size:18px;background-color:orange;'>Your result has been withheld by the office and is not available at this time. <h3>folowing are The Reasons</h3> <li> SSLC Scribe Helping Examiners</li><li>Continuous Absenteeis (more than 5 subjects)</li></p?";
+        document.getElementById("printBtn").style.display = "flex";
+        document.getElementById("searchField").style.display = "none";
+}else{
     document.getElementById("progressCardContainer").innerHTML = progressHTML;
     document.getElementById("printBtn").style.display = "flex";
     document.getElementById("searchField").style.display = "none";
+}
 }
 
 async function loadReport2() {
