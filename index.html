@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Progress Card</title>
+    <title>ANNUAL RESULT</title>
    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
@@ -434,7 +434,7 @@ function capitalizeDivision() {
 
    
     
-    <div id="progressCardContainer" style="display: block;"></div>
+    <div id="progressCardContainer" style="display: none;"></div>
     </div>
    <div id="printArea" style="display: none;">
     <div style="display: flex;justify-content: right;">
@@ -626,20 +626,14 @@ if(clason > 7){
             }
             var classt = studentClass+" "+division; 
             if (parseInt(adnumber) === 4789 && division === "ADMIN") {
-alert("Admin access granted");
+                alert("Admin access granted");
                     window.location.href = "csvparse.html";
 
                 }else{
                     displayGradingCriteria(studentClass)
                 // To show the notification
                     loading('block');
-                    const result = await loadReport2();
-                  if(result.adnumber===adnumber){
-            if((parseFloat (result.balance)||0) >=1000){
-                resultHold(result);
-                loading('none');
-                
-            }else{
+                   
         
             try {
                 const querySnapshot = await getDocs(query(
@@ -660,15 +654,16 @@ alert("Admin access granted");
                 let studentInfo = {};
 
                 querySnapshot.forEach((doc) => {
-    const data = doc.data();
-
-    studentData=  processSubjects(data);
+                    const data = doc.data();
+                                    
+                    studentData=  processSubjects(data);
 
                     studentInfo = {
                         name: data.name,
                         class: data.class,
                         division: data.division,
-                        adnumber: data.adnumber
+                        adnumber: data.adnumber,
+                        fee:data.fee
                     };
                 });
 
@@ -679,11 +674,12 @@ alert("Admin access granted");
                 alert("❌ Error fetching data: " + error.message);
             }
         }
-    }}
-        });
+    }
+        );
 
         function processSubjects(data) {
-    const subjectOrder = ["ARABIC", "MALAYALAM", "ENGLISH", "HINDI", "EVS", "BS", "BIOLOGY", "CHEMISTRY", "PHYSICS", "SS1", "MTS"];
+            //console.log(data);
+    const subjectOrder = ["ARABIC", "MALAYALAM", "ENGLISH", "HINDI", "EVS", "BS","G K", "BIOLOGY", "CHEMISTRY", "PHYSICS", "SS1", "MATHS","I T","PT"];
     const studentData = [];
 
     if (Array.isArray(data.subjects)) {
@@ -744,6 +740,11 @@ alert("Admin access granted");
         }
     
         function displayProgressCard(studentInfo, studentData) {
+            if(studentInfo.fee>=1000){
+                resultHold(studentInfo);
+            }else{
+
+            
     let progressHTML = `
        <div id="progressCard">
         <img id="loginemblom3" src="https://drive.google.com/thumbnail?id=1BKHBRTLhL6xokJ-Bz8fkM3hjllsKIqvb&sz=800" width="150" height="150" z-index="-900">
@@ -861,11 +862,10 @@ console.log('usermail:'+adnumber)
         // You might want to add some user-facing error handling here
     }
 }
-
+        }
 //loadReport2();
     </script>
     
 
 </body>
 </html>
-
