@@ -258,25 +258,45 @@ margin:auto;
     </style>
 </head>
 <body>
-    <div id="nonePrint" style="display: block;">
+    <div id="nonePrint" style="display: block; text-align: center;">
     
-    
+    <div id="schoolHeader">
+        <br>
+        <h3 class="arabic">KYHSS ATHAVANAD</h3>
+        <img id="loginemblom3" src="https://drive.google.com/thumbnail?id=1BKHBRTLhL6xokJ-Bz8fkM3hjllsKIqvb&sz=800" width="100" height="100" style="border-radius: 50%; margin-bottom: 0px; padding: 1px; object-fit: fill;">
         
-    <div id="searchField" class="container" style="display:block;">
-        <div>
-            <br>
-             <h3 class="arabic"
->KYHSS ATHAVANAD</h3>
-            <img id="loginemblom3" src="https://drive.google.com/thumbnail?id=1BKHBRTLhL6xokJ-Bz8fkM3hjllsKIqvb&sz=800" width="100" height="100">
-           
-            <h3  style="margin-top:0px;margin-bottom:0.3em;" class="malayalam">School Code:19094 : HSS Code :11118</h3>
-            <h3 id="campus" style="margin-top: 0.2em;">PMSA ORPHANAGE CAMPUS KATTILANGADI</h3>
-          </div>
-        <h2 style="color:red">Annual Examination Result</h2>
-        <input type="text" id="searchAdnumber" placeholder="Enter AD Number">
-        <input type="text" id="searchClass" placeholder="Enter Class">
-                    <input type="text" id="searchDivision" placeholder="Enter Division" onchange="capitalizeDivision()">
+        <h3 style="margin-top:0px;margin-bottom:0.3em;" class="malayalam">School Code: 19094 | HSS Code: 11118</h3>
+        <h3 id="campus" style="margin-top: 0.2em;">PMSA ORPHANAGE CAMPUS KATTILANGADI</h3>
+        <h2 style="color:red; margin-top: 10px;">Annual Examination Result</h2>
+    </div>
 
+    <div id="resultNotice" style="padding: 30px 10px; border: 2px dashed #cbd5e1; border-radius: 15px; max-width: 450px; margin: 20px auto; animation: slideIn 0.6s ease-out;">
+        <div style="display: inline-block; padding: 4px 12px; background: #fee2e2; color: #ef4444; border-radius: 20px; font-size: 11px; font-weight: bold; margin-bottom: 10px; animation: pulse 2s infinite;">
+            SYSTEM STATUS: PENDING
+        </div>
+        <p style="color: #475569; margin-bottom: 15px; font-weight: 500;">Results will be published on:</p>
+        
+        <div style="background: #1e293b; color: white; padding: 15px; border-radius: 12px; display: inline-flex; align-items: center; gap: 15px; font-size: 18px; font-weight: bold; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);">
+            <span>16 MARCH 2026</span>
+            <span style="color: #64748b;">|</span>
+            <span style="color: #38bdf8;">03:00 PM</span>
+        </div>
+        <p style="margin-top: 20px; font-size: 12px; color: #94a3b8;">Portal will automatically activate at the scheduled time.</p>
+    </div>
+
+    <div id="searchField" class="container" style="display: none; margin-top: 20px;">
+        <input type="text" id="searchAdnumber" placeholder="Enter AD Number" style="padding: 10px; width: 80%; max-width: 300px; margin-bottom: 10px;">
+        <br>
+        <input type="text" id="searchClass" placeholder="Enter Class" style="padding: 10px; width: 80%; max-width: 300px; margin-bottom: 10px;">
+        <br>
+        <input type="text" id="searchDivision" placeholder="Enter Division" onchange="capitalizeDivision()" style="padding: 10px; width: 80%; max-width: 300px;">
+     <button id="searchBtn">Get Result</button>
+        <div id="loadingColor" style="display: none;">
+            Loading....your Results....
+        </div>
+    </div>
+
+</div>
 <script>
 function capitalizeDivision() {
   const input = document.getElementById("searchDivision");
@@ -285,10 +305,7 @@ function capitalizeDivision() {
   }
 }
 </script>
-        <button id="searchBtn">Get Result</button>
-        <div id="loadingColor" style="display: none;">
-            Loading....your Results....
-        </div>
+       
         <script>
         function loading(is) {
   const div = document.getElementById("loadingColor");
