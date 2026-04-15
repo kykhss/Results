@@ -767,7 +767,7 @@ if(clason > 7){
             
     let progressHTML = `
        <div id="progressCard">
-        <img id="loginemblom3" src="https://drive.google.com/thumbnail?id=1BKHBRTLhL6xokJ-Bz8fkM3hjllsKIqvb&sz=800" width="150" height="150" z-index="-900" style="border-radius: 50%; margin-bottom: 0px; object-fit: fill;">
+            <img id="loginemblom3" src="https://drive.google.com/thumbnail?id=1BKHBRTLhL6xokJ-Bz8fkM3hjllsKIqvb&sz=800" width="150" height="150" z-index="-900" style="border-radius: 50%; margin-bottom: 0px; object-fit: fill;">
                 <h1 class="arabic" style="margin-bottom:0px;">KYKHSS ATHAVANAD</h1>
             <h2 style="margin-top:0px;margin-bottom:0.3em;" class="malayalam">School Code: 19094; HSS Code:11118</h2>
             <h3 style="margin-top: 0.2em;">PMSA ORPHANAGE CAMPUS KATTILANGADI</h3>
@@ -778,8 +778,8 @@ if(clason > 7){
                 <table border="1" cellspacing="0" cellpadding="5" style="width: 100%; text-align: center;">
                     <tr>
                         <th>Subject</th>
-                        <th>Te Marks</th>
-                        <th>Ce Marks</th>
+                        <th>Te</th>
+                        <th>Ce</th>
                         <th>Grade</th>
                         <th>Status</th>
                     </tr>
@@ -797,7 +797,7 @@ if(clason > 7){
         const isPassed = ((parseFloat(subject.obtTeMark)||0)/(parseFloat(subject.maxTeMark)||0))*100 >= 30;
         const statusIcon = isPassed ? 'P':'F';//'✔️' : '❌'; // Tick for pass, Cross for fail
         const rowStyle = isPassed ? "" : 'style="background-color: #ffcccc; font-weight: bold;"'; // Red background for fail
-        if (subject.obtTeMark === "Ab") {
+        if (subject.obtTeMark.toLowerCase() === "ab") {
   abcount++; // Increment abcount
 }
         if (!isPassed) {
@@ -807,9 +807,9 @@ if(clason > 7){
         progressHTML += `
             <tr ${rowStyle}>
                 <td>${subject.subject}</td>
-                <td>${subject.obtTeMark}/${subject.maxTeMark}</td>
+                <td style="text-align: center;color:${isPassed? "black" : "red"}">${subject.obtTeMark}/${subject.maxTeMark}</td>
                 <td>${subject.obtCeMark}/${subject.maxCeMark}</td>
-                <td>${grade}</td> 
+                <td>${isPassed ? grade : '-'}</td> 
                 <td>${statusIcon}</td>
             </tr>
         `;
@@ -828,7 +828,7 @@ if(clason > 7){
        <div style="display: flex; justify-content: space-between; margin:1px;">
              <p><strong>Percentage:</strong> ${percentage}%</p>
     <span> Result :
-    <span style="font-size:12px; width:fit-content;max-width:200px; padding: 4px; border: 1px solid #ccc; border-radius: 1px; background-color: ${hasFailed?'#efafaf':'#abd8b5'}; align-items: center;justify-content: center; color: ${hasFailed?'red':'green'}; " id="status" >${hasFailed? (((studentInfo.class.split(" ")[0]) > 6) ? 'Faild- ReAppear':'Faild -Promoted'):'Passed'}</span>
+    <span style="font-size:12px; width:fit-content;max-width:200px; padding: 4px; border: 1px solid #ccc; border-radius: 1px; background-color: ${hasFailed?'#efafaf':'#abd8b5'}; align-items: center;justify-content: center; color: ${hasFailed?'red':'green'}; " id="status" >${hasFailed? (((studentInfo.class.split(" ")[0]) > 5) ? 'Faild- ReAppear':'Faild -Promoted'):'Passed'}</span>
     </span>
    </div>
 </div>
