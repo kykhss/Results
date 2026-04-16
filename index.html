@@ -845,7 +845,7 @@ if(clason > 7){
        <div style="display: flex; justify-content: space-between; margin:1px;">
              <p><strong>Percentage:</strong> ${percentage}%</p>
     <span> Result :
-     <span style="font-size:12px; width:fit-content;max-width:200px; padding: 4px; border: 1px solid #ccc; border-radius: 1px; background-color: ${hasFailed?'#efafaf':'#abd8b5'}; align-items: center;justify-content: center; color: ${hasFailed?'red':'green'}; " id="status" >${hasFailed? (((studentInfo.class.split(" ")[0]) > 4) ? (studentInfo.class.split(" ")[0]) === 9 ? 'Faild' : 'Faild- ReAppear':'Faild -Promoted'):'Passed'}</span>
+     <span style="font-size:12px; width:fit-content;max-width:200px; padding: 4px; border: 1px solid #ccc; border-radius: 1px; background-color: ${hasFailed?'#efafaf':'#abd8b5'}; align-items: center;justify-content: center; color: ${hasFailed?'red':'green'}; " id="status" >${hasFailed? (((studentInfo.class.split(" ")[0]) > 4) ? (studentInfo.class.split(" ")[0]) == 9 ? 'Faild' : 'Faild- ReAppear':'Faild -Promoted'):'Passed'}</span>
    </span>
    </div>
 </div>
