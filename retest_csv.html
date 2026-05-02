@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Independent Data Upload with Preview</title>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-app.js";
+        import { getFirestore, doc, writeBatch } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyABcd8PIcjwIvDqFaLlNHpb8j-TE2Hi9YA",
+            authDomain: "thanbeeh-e61d9.firebaseapp.com",
+            projectId: "thanbeeh-e61d9",
+            storageBucket: "thanbeeh-e61d9.appspot.com",
+            messagingSenderId: "1072993385928",
+            appId: "1:1072993385928:web:7279146f96c0410dd5d4fd"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        document.addEventListener("DOMContentLoaded", () => {
+            let marksToSave = {};
+            let feesToSave = {};
+
+            const marksPreview = document.querySelector('#marksTable tbody');
+            const feesPreview = document.querySelector('#feesTable tbody');
+
+            // --- 1. PARSE MARKS ---
+            document.getElementById('parseButton').addEventListener('click', async () => {
+                const file = document.getElementById('csvFileInput').files[0];
+                if (!file) return alert("Select Marks CSV");
+                
+                const text = await file.text();
+                const rows = text.split('\n').filter(r => r.trim());
+                marksToSave = {};
+                marksPreview.innerHTML = "";
+
+                rows.forEach(row => {
+                    // Remove quotes if present and split
+                    const cols = row.split(',').map(c => c.replace(/"/g, '').trim());
+                    if (cols.length < 6) return;
+
+                    const [ad, name, cls, sub, max, obt] = cols;
+                    if (!ad) return;
+
+                    if (!marksToSave[ad]) {
+                        marksToSave[ad] = { adnumber: ad, name, class: cls, retest_subjects: [] };
+                    }
+                    marksToSave[ad].retest_subjects.push({ subject: sub, maxMark: max, obtMark: obt });
+
+                    // Update Table UI
+                    const tr = `<tr><td>${ad}</td><td>${name}</td><td>${cls}</td><td>${sub}</td><td>${max}</td><td>${obt}</td></tr>`;
+                    marksPreview.innerHTML += tr;
+                });
+                
+                document.getElementById('saveMarksBtn').style.display = 'inline-block';
+            });
+
+            // --- 2. PARSE FEES ---
+            document.getElementById('parseFeeButton').addEventListener('click', async () => {
+                const file = document.getElementById('feeFileInput').files[0];
+                if (!file) return alert("Select Fee CSV");
+
+                const text = await file.text();
+                const rows = text.split('\n').filter(r => r.trim());
+                feesToSave = {};
+                feesPreview.innerHTML = "";
+
+                rows.forEach(row => {
+                    const cols = row.split(',').map(c => c.replace(/"/g, '').trim());
+                    const [ad, bal] = cols;
+                    if (!ad) return;
+
+                    feesToSave[ad] = { fee: parseFloat(bal) || 0 };
+                    
+                    const tr = `<tr><td>${ad}</td><td>${bal}</td></tr>`;
+                    feesPreview.innerHTML += tr;
+                });
+
+                document.getElementById('saveFeesBtn').style.display = 'inline-block';
+            });
+
+            // --- 3. SAVE LOGIC (MERGE: TRUE) ---
+            async function uploadData(dataMap, label) {
+                const entries = Object.entries(dataMap);
+                if (entries.length === 0) return;
+                
+                let batch = writeBatch(db);
+                let count = 0;
+
+                for (let i = 0; i < entries.length; i++) {
+                    const [ad, data] = entries[i];
+                    const docRef = doc(db, "schoolMarks", ad);
+                    
+                    // merge: true ensures we don't overwrite existing fields
+                    batch.set(docRef, data, { merge: true });
+                    count++;
+
+                    if (count >= 500 || i === entries.length - 1) {
+                        await batch.commit();
+                        batch = writeBatch(db);
+                        count = 0;
+                    }
+                }
+                alert(`Successfully uploaded ${label}`);
+            }
+
+            document.getElementById('saveMarksBtn').addEventListener('click', () => uploadData(marksToSave, "Marks"));
+            document.getElementById('saveFeesBtn').addEventListener('click', () => uploadData(feesToSave, "Fees"));
+        });
+    </script>
+    <style>
+        body { font-family: sans-serif; padding: 20px; color: #333; }
+        .section { background: #fff; padding: 20px; border: 1px solid #ddd; border-radius: 8px; margin-bottom: 30px; }
+        .scroll-area { max-height: 250px; overflow-y: auto; margin-top: 15px; border: 1px solid #eee; }
+        table { width: 100%; border-collapse: collapse; font-size: 13px; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background: #eee; position: sticky; top: 0; }
+        button { padding: 10px 20px; cursor: pointer; border-radius: 4px; border: none; font-weight: bold; margin-top: 10px; }
+        .parse { background: #27ae60; color: white; }
+        .save { background: #2980b9; color: white; display: none; }
+    </style>
+</head>
+<body>
+
+    <h2>Independent Student Data Upload</h2>
+
+    <div class="section">
+        <h3>1. Marks Upload</h3>
+        <input type="file" id="csvFileInput" accept=".csv">
+        <button class="parse" id="parseButton">Parse Marks</button>
+        
+        <div class="scroll-area">
+            <table id="marksTable">
+                <thead><tr><th>AdNo</th><th>Name</th><th>Class</th><th>Subject</th><th>Max</th><th>Obt</th></tr></thead>
+                <tbody></tbody>
+            </table>
+        </div>
+        <button class="save" id="saveMarksBtn">Save Marks (Merge Mode)</button>
+    </div>
+
+    <div class="section">
+        <h3>2. Fee Upload</h3>
+        <input type="file" id="feeFileInput" accept=".csv">
+        <button class="parse" id="parseFeeButton">Parse Fees</button>
+        
+        <div class="scroll-area">
+            <table id="feesTable">
+                <thead><tr><th>AdNo</th><th>Balance</th></tr></thead>
+                <tbody></tbody>
+            </table>
+        </div>
+        <button class="save" id="saveFeesBtn">Save Fees (Merge Mode)</button>
+    </div>
+
+</body>
+</html>
