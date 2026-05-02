@@ -46,7 +46,7 @@
                     if (!ad) return;
 
                     if (!marksToSave[ad]) {
-                        marksToSave[ad] = { adnumber: ad, name, class: cls, retest_subjects: [] };
+                        marksToSave[ad] = { adnumber: ad,retest_subjects: [] };
                     }
                     marksToSave[ad].retest_subjects.push({ subject: sub, maxMark: max, obtMark: obt });
 
